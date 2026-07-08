@@ -2,6 +2,8 @@ llama-index>=0.10.0
 llama-index-vector-stores-chroma
 llama-index-llms-openai
 llama-index-embeddings-openai
+llama-index-embeddings-huggingface
+sentence-transformers
 chromadb
 streamlit
 pypdf
@@ -9,5 +11,3 @@ python-docx
 python-dotenv
 rapidfuzz
 openai
-llama-index-llms-google-genai
-llama-index-embeddings-google-genai
