@@ -38,13 +38,13 @@ class FilteredQueryEngine:
             try:
                 setup_llamaindex_settings(api_key=key_to_use)
                 self.is_llm_ready = True
-                print(f"✅ Gemini API key accepted — LLM mode enabled.")
+                print(f"[OK] Gemini API key accepted -- LLM mode enabled.")
             except Exception as e:
-                print(f"⚠️ Failed to set up LlamaIndex settings: {e}. Using mock models.")
+                print(f"[WARN] Failed to set up LlamaIndex settings: {e}. Using mock models.")
                 Settings.embed_model = MockEmbedding(embed_dim=768)
                 Settings.llm = MockLLM()
         else:
-            print("⚠️ GEMINI_API_KEY not set — running in Mock Mode.")
+            print("[WARN] GEMINI_API_KEY not set -- running in Mock Mode.")
             Settings.embed_model = MockEmbedding(embed_dim=768)
             Settings.llm = MockLLM()
 
@@ -56,7 +56,7 @@ class FilteredQueryEngine:
             self.vector_store = ChromaVectorStore(chroma_collection=self.chroma_collection)
             self.index = VectorStoreIndex.from_vector_store(self.vector_store)
         except Exception as e:
-            print(f"⚠️ Failed to load Chroma DB: {e}. Retrieval index is unavailable.")
+            print(f"[WARN] Failed to load Chroma DB: {e}. Retrieval index is unavailable.")
 
     def query(self, query_str: str) -> dict:
         """
