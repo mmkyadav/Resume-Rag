@@ -91,6 +91,14 @@ class FuzzyNameMatcher:
             terms_map[name] = list(set(terms))
         return terms_map
 
+    def _is_exact_match(self, qw: str, canonical_name: str) -> bool:
+        """Determines if the query window tokens are exact clean substrings of the canonical name."""
+        canonical_tokens = [self._clean_token(t) for t in canonical_name.split() if self._clean_token(t)]
+        qw_tokens = [self._clean_token(t) for t in qw.split() if self._clean_token(t)]
+        if not qw_tokens:
+            return False
+        return all(tok in canonical_tokens for tok in qw_tokens)
+
     def match_query(self, query: str) -> list[dict]:
         """
         Parses potential candidate names from the search query.
@@ -149,9 +157,8 @@ class FuzzyNameMatcher:
                 for term in terms:
                     score = fuzz.ratio(qw, term)
                     if score >= self.threshold and score > best_score:
-                        canonical_clean_tokens = [self._clean_token(t) for t in canonical_name.split() if len(self._clean_token(t)) > 1]
-                        is_exact = (qw in canonical_clean_tokens) or (qw == canonical_name.lower())
-                        is_spelling_mistake = not is_exact
+                        is_exact = self._is_exact_match(qw, canonical_name)
+                        is_spelling_mistake = (score < 100.0) or (not is_exact)
                         
                         best_score = score
                         best_match = {
