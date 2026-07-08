@@ -112,7 +112,7 @@ def build_or_refresh_index(force_rebuild: bool = False):
         show_progress=True
     )
 
-    print("\n--- ✅ Indexing Complete! ---")
+    print("\n--- Indexing Complete! ---")
     print(f"Unique candidates indexed: {sorted(list(set(candidate_names)))}")
     print(f"Total documents: {len(documents)}")
     return index
